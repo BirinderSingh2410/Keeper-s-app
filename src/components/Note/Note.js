@@ -3,6 +3,8 @@ import styled from "styled-components";
 import EditIcon from "@mui/icons-material/Edit";
 import Fab from "@mui/material/Fab";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useDispatch } from "react-redux";
+import { deleteNote, editClick } from "../../Features/NoteData";
 
 const NoteBox = styled.div`
   max-width: 300px;
@@ -49,8 +51,10 @@ const EditBox = styled.div`
 `;
 
 const Note = (props) => {
+  const dispatch = useDispatch();
+
   return (
-    <NoteBox key={props.id}>
+    <NoteBox style={{ backgroundColor: props.color }} key={props.id}>
       <h1>{props.title}</h1>
       <p>{props.desc}</p>
       <EditBox>
@@ -58,7 +62,9 @@ const Note = (props) => {
           color="secondary"
           aria-label="edit"
           className="edit-btn delete-btn"
-          onClick={() => props.delete(props.id)}
+          onClick={() => {
+            dispatch(deleteNote(props.id));
+          }}
         >
           <DeleteIcon />
         </Fab>
@@ -66,7 +72,7 @@ const Note = (props) => {
           color="secondary"
           aria-label="edit"
           className="edit-btn"
-          onClick={() => props.edit(props)}
+          onClick={() => dispatch(editClick(props.id))}
         >
           <EditIcon className="icon-bg" />
         </Fab>

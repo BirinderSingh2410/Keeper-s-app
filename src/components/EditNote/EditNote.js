@@ -1,8 +1,15 @@
-import React,{useState} from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Input from "@mui/material/Input";
-import Button from '@mui/material/Button';
-import CloseIcon from '@mui/icons-material/Close';
+import Button from "@mui/material/Button";
+import CloseIcon from "@mui/icons-material/Close";
+import { ColorPick } from "../AddNewNote/AddNewNote";
+import { useDispatch } from "react-redux";
+import IconButton from "@mui/material/IconButton";
+import { editClick, editNote } from "../../Features/NoteData";
+import ColorLensIcon from "@mui/icons-material/ColorLens";
+import { SwatchesPicker } from "react-color";
+import Tooltip from '@mui/material/Tooltip';
 
 const EditNoteBox = styled.div`
   width: 100%;
@@ -29,63 +36,106 @@ const EditPopUp = styled.div`
   border-radius: 10px;
   margin-left: 5%;
   margin-top: 10%;
-  justify-content:space-evenly;
+  justify-content: space-evenly;
   background-color: white;
-  align-items:center;
-  .input{
-    width:90%;
+  align-items: center;
+  .input {
+    width: 90%;
   }
-  .title{
-    height:30%;
-    font-size:2.8em;
-    font-weight:600;
+  .title {
+    height: 30%;
+    font-size: 2.8em;
+    font-weight: 600;
   }
-  .close-btn{
-    margin-left:85%;
-    :hover{
-      cursor:pointer;
-      color:firebrick;
+  .close-btn {
+    margin-left: 85%;
+    :hover {
+      cursor: pointer;
+      color: firebrick;
     }
   }
-  .desc{
-    font-size:1.5em;
+  .desc {
+    font-size: 1.5em;
   }
-  .save-btn{
-    background-color:#005e63;
-    :hover{
+  .save-btn {
+    background-color: #005e63;
+    :hover {
       background-color: #068f64;
     }
   }
 `;
-
+const EventsBlock = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  @media screen and (max-width: 520px) {
+    width: 70%;
+  }
+`;
 const ariaLabel = { "aria-label": "description" };
 
-const EditNote = (props) => {
-  const [title,setTitle] = useState("");
-  const [description,setDescription] = useState("");
+const EditNote = () => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [color, setColor] = useState("");
+  const [click, setClick] = useState(false);
+  const dispatch = useDispatch();
 
-  function changedData(){
-    props.setEditNote(false);
-
+  function editedNoteData() {
+    dispatch(editNote({ title: title, desc: description, color: color }));
+    dispatch(editClick());
   }
 
   return (
     <EditNoteBox>
-      <EditPopUp>
-        <CloseIcon className="close-btn" onClick={()=>{props.setEditNote(false)}}/>
+      <EditPopUp style={{ backgroundColor: color }}>
+        <CloseIcon
+          className="close-btn"
+          onClick={() => dispatch(editClick())}
+        />
         <Input
           placeholder="Title"
           className="input title"
           inputProps={ariaLabel}
-          onChange={((e)=>{setTitle(e.target.value)})}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
         />
         <Input
           placeholder="Description"
           className="input desc"
           inputProps={ariaLabel}
-          onChange={(e)=>{setDescription(e.target.value)}}
+          onChange={(e) => {
+            setDescription(e.target.value);
+          }}
         />
-        <Button variant="contained" className="save-btn" onClick={changedData} onClickCapture={()=>{props.clickCapture(title,description)}}>Save</Button>
+        <EventsBlock>
+          {click ? (
+            <ColorPick>
+              <IconButton onClick={() => setClick(false)}>
+                <CloseIcon />
+              </IconButton>
+              <SwatchesPicker
+                className="color-picker"
+                onChange={(e) => setColor(e.hex)}
+              />
+            </ColorPick>
+          ) : (
+            <Tooltip title="Pick Color">
+            <IconButton onClick={() => setClick(true)}>
+              <ColorLensIcon />
+            </IconButton>
+            </Tooltip>
+          )}
+
+          <Button
+            variant="contained"
+            className="save-btn"
+            onClick={editedNoteData}
+          >
+            Save
+          </Button>
+        </EventsBlock>
       </EditPopUp>
       <TransparentBg />
     </EditNoteBox>
