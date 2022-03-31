@@ -1,15 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Input from "@mui/material/Input";
 import Button from "@mui/material/Button";
 import CloseIcon from "@mui/icons-material/Close";
 import { ColorPick } from "../AddNewNote/AddNewNote";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
 import { editClick, editNote } from "../../Features/NoteData";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import { SwatchesPicker } from "react-color";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
+import { useMutation } from "@apollo/client";
+import { UPDATE_DATA } from "../../Queries/Queries";
+import { useSelect } from "@mui/base";
 
 const EditNoteBox = styled.div`
   width: 100%;
@@ -75,20 +78,50 @@ const EventsBlock = styled.div`
 const ariaLabel = { "aria-label": "description" };
 
 const EditNote = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [color, setColor] = useState("");
+  const [newtitle, setTitle] = useState("");
+  const [newdescription, setDescription] = useState("");
+  const [newcolor, setColor] = useState("");
   const [click, setClick] = useState(false);
+
+  const noteId = useSelector((state) => state.notes.editId);
+  const Array = useSelector((state) => state.notes.value);
   const dispatch = useDispatch();
 
+  const [updatenote] = useMutation(UPDATE_DATA);
+
   function editedNoteData() {
-    dispatch(editNote({ title: title, desc: description, color: color }));
+    var title = Array[noteId].title;
+    var description = Array[noteId].description;
+    var color = Array[noteId].color;
+
+    if (newcolor !== "") {
+      color = newcolor;
+    }
+    if (newtitle !== "") {
+      title = newtitle;
+    }
+    if (newdescription !== "") {
+      description = newdescription;
+    }
+
+    dispatch(
+      editNote({ title: title, description: description, color: color })
+    );
+
+    updatenote({
+      variables: {
+        id: noteId,
+        title: title,
+        description: description,
+        color: color,
+      },
+    });
     dispatch(editClick());
   }
 
   return (
     <EditNoteBox>
-      <EditPopUp style={{ backgroundColor: color }}>
+      <EditPopUp style={{ backgroundColor: newcolor }}>
         <CloseIcon
           className="close-btn"
           onClick={() => dispatch(editClick())}
@@ -97,9 +130,7 @@ const EditNote = () => {
           placeholder="Title"
           className="input title"
           inputProps={ariaLabel}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
+          onChange={(e) => setTitle(e.target.value)}
         />
         <Input
           placeholder="Description"
@@ -122,9 +153,9 @@ const EditNote = () => {
             </ColorPick>
           ) : (
             <Tooltip title="Pick Color">
-            <IconButton onClick={() => setClick(true)}>
-              <ColorLensIcon />
-            </IconButton>
+              <IconButton onClick={() => setClick(true)}>
+                <ColorLensIcon />
+              </IconButton>
             </Tooltip>
           )}
 

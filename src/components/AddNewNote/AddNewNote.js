@@ -6,10 +6,12 @@ import Fab from "@mui/material/Fab";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import { CirclePicker } from "react-color";
 import IconButton from "@mui/material/IconButton";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
-import Tooltip from '@mui/material/Tooltip';
+import Tooltip from "@mui/material/Tooltip";
 import { insertNote } from "../../Features/NoteData";
+import { useMutation, useQuery } from "@apollo/client";
+import { INSERT_DATA, GET_DATA } from "../../Queries/Queries";
 
 const NewNoteBox = styled.div`
   width: 500px;
@@ -85,17 +87,36 @@ const AddNewNote = () => {
   const [descriptioninput, setDescription] = useState("");
   const [click, setClick] = useState(false);
   const [colorClick, setColorClick] = useState("");
+  const Array = useSelector((state) => state.notes.value);
   const dispatch = useDispatch();
+
+  const [addTodo] = useMutation(INSERT_DATA);
 
   function addNewNote() {
     setClick(false);
-    dispatch(
-      insertNote({
-        title: titleinput,
-        desc: descriptioninput,
-        color: colorClick,
-      })
-    );
+    var uniqueIndex;
+    if (Array.length === 0) uniqueIndex = 0;
+    else uniqueIndex = Array[Array.length - 1].id + 1;
+    console.log(Array);
+    if (titleinput !== "" || descriptioninput !== "") {
+      addTodo({
+        variables: {
+          title: titleinput,
+          description: descriptioninput,
+          color: colorClick,
+          id: uniqueIndex,
+        },
+      });
+
+      dispatch(
+        insertNote({
+          id: uniqueIndex,
+          title: titleinput,
+          description: descriptioninput,
+          color: colorClick,
+        })
+      );
+    }
     setColorClick("");
   }
 
@@ -125,14 +146,15 @@ const AddNewNote = () => {
             </IconButton>
             <CirclePicker
               className="color-picker"
-              onChange={(e) => setColorClick(e.hex)}
+              onChange={(e) => setColorClick(e.hex)
+              }
             />
           </ColorPick>
         ) : (
           <Tooltip title="Pick Color">
-          <IconButton onClick={() => setClick(true)}>
-            <ColorLensIcon />
-          </IconButton>
+            <IconButton onClick={() => setClick(true)}>
+              <ColorLensIcon />
+            </IconButton>
           </Tooltip>
         )}
       </ColorBox>

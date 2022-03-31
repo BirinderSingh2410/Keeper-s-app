@@ -8,13 +8,16 @@ export const noteSlice = createSlice({
     editId: 0,
   },
   reducers: {
+    getNotes: (state, action) => {
+      state.value = action.payload;
+    },
     insertNote: (state, action) => {
-      if (action.payload.title !== "" || action.payload.desc !== "")
-        state.value = [action.payload, ...state.value];
+      if (action.payload.title !== "" || action.payload.description !== "")
+        state.value.push(action.payload);
     },
     deleteNote: (state, action) => {
-      state.value = state.value.filter((i, index) => {
-        return index !== action.payload;
+      state.value = state.value.filter((i) => {
+        return i.id !== action.payload;
       });
     },
     editClick: (state, action) => {
@@ -22,21 +25,18 @@ export const noteSlice = createSlice({
       state.editId = action.payload;
     },
     editNote: (state, action) => {
-      state.value = state.value.filter((i, index) => {
-        if (index === state.editId) {
-          if (action.payload.title !== "")
-            state.value[state.editId].title = action.payload.title;
-          if (action.payload.desc !== "")
-            state.value[state.editId].desc = action.payload.desc;
-          if (action.payload.color !== "")
-            state.value[state.editId].color = action.payload.color;
+      state.value = state.value.filter((i) => {
+        if (i.id === state.editId) {
+          state.value[state.editId].title = action.payload.title;
+          state.value[state.editId].description = action.payload.description;
+          state.value[state.editId].color = action.payload.color;
         }
-        return state.value[index];
+        return state.value[i.id];
       });
     },
   },
 });
 
-export const { insertNote, deleteNote, editClick, editNote } =
+export const { insertNote, deleteNote, editClick, editNote, getNotes } =
   noteSlice.actions;
 export default noteSlice.reducer;

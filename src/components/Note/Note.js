@@ -4,6 +4,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import Fab from "@mui/material/Fab";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch } from "react-redux";
+import { useMutation } from "@apollo/client";
+import { DELETE_DATA } from "../../Queries/Queries";
 import { deleteNote, editClick } from "../../Features/NoteData";
 
 const NoteBox = styled.div`
@@ -52,6 +54,13 @@ const EditBox = styled.div`
 
 const Note = (props) => {
   const dispatch = useDispatch();
+  const [deletenote] = useMutation(DELETE_DATA);
+
+  function DeleteNoteFunction() {
+    console.log(props.id);
+    dispatch(deleteNote(props.id));
+    deletenote({ variables: { id: { _eq: props.id } } });
+  }
 
   return (
     <NoteBox style={{ backgroundColor: props.color }} key={props.id}>
@@ -62,9 +71,7 @@ const Note = (props) => {
           color="secondary"
           aria-label="edit"
           className="edit-btn delete-btn"
-          onClick={() => {
-            dispatch(deleteNote(props.id));
-          }}
+          onClick={DeleteNoteFunction}
         >
           <DeleteIcon />
         </Fab>

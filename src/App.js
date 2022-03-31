@@ -1,41 +1,32 @@
 import React from "react";
-import Header from "./components/Header/Header";
-import AddNewNote from "./components/AddNewNote/AddNewNote";
-import Note from "./components/Note/Note";
-import styled from "styled-components";
-import EditNote from "./components/EditNote/EditNote";
-import { useSelector } from "react-redux";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  HttpLink,
+} from "@apollo/client";
+import { onError } from "@apollo/client/link/error";
+import MainComponent from "./components/MainComponent/MainComponent";
 
-const NoteFlex = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
+const errorLink = onError(({ graphqlErrors, networkError }) => {
+  //if error
+  if (graphqlErrors) {
+    console.log("error:");
+  }
+});
+
+const client = new ApolloClient({
+  cache: new InMemoryCache(),
+  link: new HttpLink({
+    uri: "https://warm-cat-45.hasura.app/v1/graphql",
+  }), //function link from where data is comming
+});
 
 const App = () => {
-  const Array = useSelector((state) => state.notes.value); //state form the store "notes" is in store and ".values" in the slice
-  const editKey = useSelector((state) => state.notes.editKey);
-
   return (
-    <div>
-      <Header />
-      <div style={{ textAlign: "-webkit-center" }}>
-        <AddNewNote />
-      </div>
-      <NoteFlex>
-        {editKey ? <EditNote /> : null}
-        {Array.map((i, index) => {
-          return (
-            <Note
-              key={index}
-              id={index}
-              color={i.color}
-              title={i.title}
-              desc={i.desc}
-            />
-          );
-        })}
-      </NoteFlex>
-    </div>
+    <ApolloProvider client={client}>
+      <MainComponent />
+    </ApolloProvider>
   );
 };
 
