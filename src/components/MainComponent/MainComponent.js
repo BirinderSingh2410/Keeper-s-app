@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Header from "../Header/Header";
 import AddNewNote from "../AddNewNote/AddNewNote";
 import Note from "../Note/Note";
@@ -6,7 +6,7 @@ import styled from "styled-components";
 import EditNote from "../EditNote/EditNote";
 import { useSelector, useDispatch } from "react-redux";
 import { getNotes } from "../../Features/NoteData";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import { GET_DATA } from "../../Queries/Queries";
 import CircularProgress from '@mui/material/CircularProgress';
 import LoadingBg from '../../asset/images/Capture.PNG'
@@ -18,7 +18,6 @@ const NoteFlex = styled.div`
 
 const LoadingBox = styled.div`
   text-align:center;
-  overflow:hidden;
   .bgimage{
     height:110vh;
   }
@@ -66,7 +65,7 @@ const MainComponent = () => {
   document.body.style.overflow="hidden";
   return(
     <LoadingBox>
-      <img src={LoadingBg} className="bgimage"/>
+      <img alt="loading" src={LoadingBg} className="bgimage"/>
       <div className="loading-content">
         <h1 className="loading-heading">Hi There!</h1>
         <p>Please wait</p>
@@ -75,20 +74,21 @@ const MainComponent = () => {
     </LoadingBox>
   ) 
 }
+if(error) return <p>Error!!!!!!</p>
   if (!trigger) {
     dispatch(getNotes(data.notes_data));
     setTrigger(true);
   }
-
+  document.body.style.overflow="";
   return (
-    <div>
+    <div style={{paddingBottom:"6vh"}}>
       <Header />
       <div style={{ textAlign: "-webkit-center" }}>
         <AddNewNote />
       </div>
       <NoteFlex>
         {editKey ? <EditNote /> : null}
-        {Array.map((i) => {
+        {Array.map((i,index) => {
           return (
             <Note
               key={i.id}

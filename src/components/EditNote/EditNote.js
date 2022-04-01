@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import Input from "@mui/material/Input";
 import Button from "@mui/material/Button";
@@ -12,7 +12,7 @@ import { SwatchesPicker } from "react-color";
 import Tooltip from "@mui/material/Tooltip";
 import { useMutation } from "@apollo/client";
 import { UPDATE_DATA } from "../../Queries/Queries";
-import { useSelect } from "@mui/base";
+
 
 const EditNoteBox = styled.div`
   width: 100%;
@@ -89,10 +89,12 @@ const EditNote = () => {
 
   const [updatenote] = useMutation(UPDATE_DATA);
 
-  function editedNoteData() {
+  function editedNoteData() { 
+
     var title = Array[noteId].title;
     var description = Array[noteId].description;
     var color = Array[noteId].color;
+
 
     if (newcolor !== "") {
       color = newcolor;
@@ -105,12 +107,12 @@ const EditNote = () => {
     }
 
     dispatch(
-      editNote({ title: title, description: description, color: color })
+      editNote({index:Array[noteId].id, title: title, description: description, color: color })
     );
 
     updatenote({
       variables: {
-        id: noteId,
+        id: Array[noteId].id,
         title: title,
         description: description,
         color: color,

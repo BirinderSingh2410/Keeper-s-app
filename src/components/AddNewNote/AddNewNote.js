@@ -10,8 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import Tooltip from "@mui/material/Tooltip";
 import { insertNote } from "../../Features/NoteData";
-import { useMutation, useQuery } from "@apollo/client";
-import { INSERT_DATA, GET_DATA } from "../../Queries/Queries";
+import { useMutation } from "@apollo/client";
+import { INSERT_DATA } from "../../Queries/Queries";
 
 const NewNoteBox = styled.div`
   width: 500px;
@@ -95,9 +95,9 @@ const AddNewNote = () => {
   function addNewNote() {
     setClick(false);
     var uniqueIndex;
-    if (Array.length === 0) uniqueIndex = 0;
+    if(Array.length === 0) uniqueIndex = 0;
     else uniqueIndex = Array[Array.length - 1].id + 1;
-    console.log(Array);
+    
     if (titleinput !== "" || descriptioninput !== "") {
       addTodo({
         variables: {

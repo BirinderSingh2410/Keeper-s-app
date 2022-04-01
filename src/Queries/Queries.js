@@ -1,8 +1,8 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql} from "@apollo/client";
 
 export const GET_DATA = gql`
   query MyQuery {
-    notes_data {
+    notes_data (order_by: {id: asc}){
       id
       title
       description
