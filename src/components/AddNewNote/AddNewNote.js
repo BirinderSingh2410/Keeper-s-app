@@ -9,7 +9,7 @@ import IconButton from "@mui/material/IconButton";
 import { useDispatch, useSelector } from "react-redux";
 import CloseIcon from "@mui/icons-material/Close";
 import Tooltip from "@mui/material/Tooltip";
-import { insertNote } from "../../Features/NoteData";
+import { insertNote } from "../../Reducer/NoteData";
 import { useMutation } from "@apollo/client";
 import { INSERT_DATA } from "../../Queries/Queries";
 
@@ -118,11 +118,14 @@ const AddNewNote = () => {
       );
     }
     setColorClick("");
+    document.getElementById('input-tag-title').value ='';
+    document.getElementById('input-tag-desc').value ='';
   }
 
   return (
     <NewNoteBox style={{ backgroundColor: colorClick }}>
       <Input
+        id="input-tag-title"
         placeholder="Title"
         className="input title"
         inputProps={ariaLabel}
@@ -131,6 +134,7 @@ const AddNewNote = () => {
         }}
       />
       <Input
+        id="input-tag-desc"
         placeholder="Description"
         className="input desc"
         inputProps={ariaLabel}

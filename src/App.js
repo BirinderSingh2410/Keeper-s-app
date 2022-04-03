@@ -1,10 +1,12 @@
 import React from "react";
+import Login from "./components/Login/Login";
 import {
   ApolloClient,
   InMemoryCache,
   ApolloProvider,
   HttpLink,
 } from "@apollo/client";
+import { useSelector } from "react-redux";
 import { onError } from "@apollo/client/link/error";
 import MainComponent from "./components/MainComponent/MainComponent";
 
@@ -23,10 +25,15 @@ const client = new ApolloClient({
 });
 
 const App = () => {
+  const login = useSelector((state)=>state.notes.login);
+
+
   return (
-    <ApolloProvider client={client}>
-      <MainComponent />
-    </ApolloProvider>
+    <div>
+      {login ?<ApolloProvider client={client}>
+        <MainComponent />
+      </ApolloProvider> : <Login />}
+    </div>
   );
 };
 

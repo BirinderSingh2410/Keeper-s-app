@@ -5,7 +5,7 @@ import Note from "../Note/Note";
 import styled from "styled-components";
 import EditNote from "../EditNote/EditNote";
 import { useSelector, useDispatch } from "react-redux";
-import { getNotes } from "../../Features/NoteData";
+import { getNotes } from "../../Reducer/NoteData";
 import { useQuery } from "@apollo/client";
 import { GET_DATA } from "../../Queries/Queries";
 import CircularProgress from '@mui/material/CircularProgress';
@@ -17,30 +17,31 @@ const NoteFlex = styled.div`
 `;
 
 const LoadingBox = styled.div`
-  text-align:center;
-  .bgimage{
-    height:110vh;
-  }
+background-image:url(${LoadingBg});
+
+/* Full height */
+height: 100vh;
+
+
+/* Center and scale the image nicely */
+background-position: center;
+background-repeat: no-repeat;
+background-size: cover;
+text-align: -webkit-center;
+
   .loading-content{
     display:flex;
     flex-direction:column;
-    width:270px;
+    width:50%;
     height:230px;
     align-items: center;
-    justify-content: space-between;
-    position:absolute;    
-    margin-top:-500px;
-    margin-left:40%;
-    @media screen and (max-width: 650px) {
-      margin-left: 30%;
-    }
-    @media screen and (max-width: 450px) {
-      margin-left: 10%;
-    }
+    justify-content: space-between; 
+    padding-top:20%;
+    
     .loading-heading{
       font-weight:200;
       color:white;
-      font-size:60px;
+      font-size:3em;
       
     }
     
@@ -48,6 +49,7 @@ const LoadingBox = styled.div`
         color: white;
     font-size: 30px;
     font-weight: 100;
+    margin-top:50px;
         
       }
   }
@@ -58,6 +60,7 @@ const MainComponent = () => {
   const Array = useSelector((state) => state.notes.value);
   const editKey = useSelector((state) => state.notes.editKey);
   const dispatch = useDispatch();
+  const name = useSelector((state) => state.notes.name) 
 
   const { data, loading, error } = useQuery(GET_DATA);
 
@@ -65,12 +68,11 @@ const MainComponent = () => {
   document.body.style.overflow="hidden";
   return(
     <LoadingBox>
-      <img alt="loading" src={LoadingBg} className="bgimage"/>
       <div className="loading-content">
-        <h1 className="loading-heading">Hi There!</h1>
+        <h1 className="loading-heading">Hi {name}!</h1>
         <p>Please wait</p>
         <CircularProgress className="circular-loading" />
-      </div>
+        </div>
     </LoadingBox>
   ) 
 }

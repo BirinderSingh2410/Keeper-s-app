@@ -6,7 +6,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useDispatch,useSelector } from "react-redux";
 import { useMutation } from "@apollo/client";
 import { DELETE_DATA } from "../../Queries/Queries";
-import { deleteNote, editClick } from "../../Features/NoteData";
+import { deleteNote, editClick } from "../../Reducer/NoteData";
 
 const NoteBox = styled.div`
   max-width: 300px;

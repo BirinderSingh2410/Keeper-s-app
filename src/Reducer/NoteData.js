@@ -5,9 +5,17 @@ export const noteSlice = createSlice({
   initialState: {
     value: [],
     editKey: false,
+    name:"",
     editId: 0,
+    login:false,
   },
   reducers: {
+    setLogin:(state,action)=>{
+      state.login = action.payload
+    },
+    setName:(state,action)=>{
+      state.name = action.payload;
+    },
     getNotes: (state, action) => {
       state.value = action.payload;
     },
@@ -36,6 +44,6 @@ export const noteSlice = createSlice({
   },
 });
 
-export const { insertNote, deleteNote, editClick, editNote, getNotes } =
+export const { insertNote, deleteNote, editClick, editNote, getNotes,setName,setLogin } =
   noteSlice.actions;
 export default noteSlice.reducer;

@@ -6,7 +6,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { ColorPick } from "../AddNewNote/AddNewNote";
 import { useDispatch, useSelector } from "react-redux";
 import IconButton from "@mui/material/IconButton";
-import { editClick, editNote } from "../../Features/NoteData";
+import { editClick, editNote } from "../../Reducer/NoteData";
 import ColorLensIcon from "@mui/icons-material/ColorLens";
 import { SwatchesPicker } from "react-color";
 import Tooltip from "@mui/material/Tooltip";
