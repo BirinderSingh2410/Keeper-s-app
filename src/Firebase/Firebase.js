@@ -3,7 +3,7 @@ import { initializeApp } from "firebase/app";
 
 
 
-import { getAuth, GoogleAuthProvider}from 'firebase/auth'
+import { getAuth, GoogleAuthProvider,signOut }from 'firebase/auth'
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -30,3 +30,6 @@ export const auth = getAuth(app);
 export const provider = new GoogleAuthProvider();
 
 
+export const signOutFromGoogle=()=>{
+  signOut(auth).then(()=>{window.location.reload(true)}).catch((error)=>console.error());
+}

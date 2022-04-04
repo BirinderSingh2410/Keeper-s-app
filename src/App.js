@@ -29,11 +29,11 @@ const App = () => {
 
 
   return (
-    <div>
-      {login ?<ApolloProvider client={client}>
+    <ApolloProvider client={client}>
+      {login ?
         <MainComponent />
-      </ApolloProvider> : <Login />}
-    </div>
+      : <Login />}
+    </ApolloProvider>
   );
 };
 

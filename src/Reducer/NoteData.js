@@ -4,12 +4,20 @@ export const noteSlice = createSlice({
   name: "notes",
   initialState: {
     value: [],
+    array:[],
     editKey: false,
     name:"",
     editId: 0,
     login:false,
+    userID:""
   },
   reducers: {
+    setCompeleteAray:(state,action)=>{
+      state.array = action.payload
+    },
+    setUserID:(state,action)=>{
+      state.userID = action.payload;
+    },
     setLogin:(state,action)=>{
       state.login = action.payload
     },
@@ -44,6 +52,6 @@ export const noteSlice = createSlice({
   },
 });
 
-export const { insertNote, deleteNote, editClick, editNote, getNotes,setName,setLogin } =
+export const { insertNote, deleteNote, editClick, editNote, getNotes,setName,setLogin,setUserID ,setCompeleteAray} =
   noteSlice.actions;
 export default noteSlice.reducer;

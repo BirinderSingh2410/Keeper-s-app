@@ -1,12 +1,34 @@
-import { gql} from "@apollo/client";
+import { gql } from "@apollo/client";
 
-export const GET_DATA = gql`
-  query MyQuery {
-    notes_data (order_by: {id: asc}){
+export const CREATE_USER = gql`
+  mutation ($id: String!, $name: String!) {
+    insert_newUser_keeper(objects: { id: $id, name: $name }) {
+      returning {
+        id
+        name
+      }
+    }
+  }
+`;
+export const GET_ALL_DATA = gql`
+  query{
+    notes_data{
       id
       title
       description
       color
+      gmail_id
+    }
+  }
+`
+export const GET_ID_DATA = gql`
+  query($gmailId:String!) {
+    notes_data(where:{gmail_id:{_eq:$gmailId}}){
+      id
+      title
+      description
+      color
+      gmail_id
     }
   }
 `;
@@ -17,19 +39,24 @@ export const INSERT_DATA = gql`
     $description: String!
     $color: String!
     $id: Int!
+    $gmailId: String!
   ) {
     insert_notes_data(
+      on_conflict:{constraint:notes_data_pkey,where:{gmail_id:{_eq:$gmailId}}},
       objects: {
-        title: $title
-        description: $description
-        color: $color
         id: $id
+        gmail_id: $gmailId
+        title: $title
+        color: $color
+        description: $description
       }
     ) {
       returning {
+        id
         title
         description
         color
+        gmail_id
       }
     }
   }
@@ -42,6 +69,7 @@ export const DELETE_DATA = gql`
     }
   }
 `;
+
 export const UPDATE_DATA = gql`
   mutation (
     $id: Int!

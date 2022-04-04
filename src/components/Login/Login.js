@@ -2,9 +2,12 @@ import React from 'react'
 import styled from 'styled-components';
 import Logingbg from '../../asset/images/_21_hd-gif-wallpaper_1920x1080-Desktop-Background-Gif-Ryanmartinproductions.com.gif'
 import { useDispatch } from 'react-redux';
-import {signInWithPopup}from 'firebase/auth'
+import {signInWithPopup,signOut}from 'firebase/auth'
 import {auth,provider} from '../../Firebase/Firebase'
-import { setName,setLogin } from '../../Reducer/NoteData';
+import { setName,setLogin,setUserID } from '../../Reducer/NoteData';
+import { CREATE_USER } from '../../Queries/Queries'; 
+import { useMutation } from '@apollo/client';
+
 
 const LoginBox = styled.div`
 
@@ -20,7 +23,9 @@ background-repeat: no-repeat;
 background-size: cover;
 text-align:center;
 
-
+@media screen and (max-width: 520px) {
+  background-position:right;
+}
 .login-button{
       height:10%;
       margin-top:20%;
@@ -40,16 +45,24 @@ text-align:center;
 }
 `
 const Login = () => {
- 
+  const [addUser]=useMutation(CREATE_USER);
+
   const dispatch = useDispatch();
 
   const signInWithGoogle = () => {
     signInWithPopup(auth,provider).then((result)=>{
-      console.log(result);
+      console.log(result.user.uid);
+      const id = result.user.uid;
+      const name = result.user.displayName;
       if(result.user.emailVerified){
-        dispatch(setName(result.user.displayName));
+        addUser({variables:{id:id,name:name}});
+        dispatch(setUserID(id))
+        dispatch(setName(name));
         dispatch(setLogin(true));
       }  
+      else{
+        alert("Wrong Email");
+      }
     }).catch((error)=>{
         console.log(error);
     });

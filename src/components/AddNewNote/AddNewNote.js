@@ -89,7 +89,7 @@ const AddNewNote = () => {
   const [colorClick, setColorClick] = useState("");
   const Array = useSelector((state) => state.notes.value);
   const dispatch = useDispatch();
-
+  const gmailId =  useSelector((state)=>state.notes.userID);
   const [addTodo] = useMutation(INSERT_DATA);
 
   function addNewNote() {
@@ -105,6 +105,7 @@ const AddNewNote = () => {
           description: descriptioninput,
           color: colorClick,
           id: uniqueIndex,
+          gmailId:gmailId
         },
       });
 
@@ -114,6 +115,7 @@ const AddNewNote = () => {
           title: titleinput,
           description: descriptioninput,
           color: colorClick,
+          gmailId:gmailId
         })
       );
     }

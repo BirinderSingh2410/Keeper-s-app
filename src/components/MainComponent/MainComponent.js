@@ -5,11 +5,12 @@ import Note from "../Note/Note";
 import styled from "styled-components";
 import EditNote from "../EditNote/EditNote";
 import { useSelector, useDispatch } from "react-redux";
-import { getNotes } from "../../Reducer/NoteData";
+import { getNotes,setCompeleteAray } from "../../Reducer/NoteData";
 import { useQuery } from "@apollo/client";
-import { GET_DATA } from "../../Queries/Queries";
+import { GET_ALL_DATA, GET_ID_DATA } from "../../Queries/Queries";
 import CircularProgress from '@mui/material/CircularProgress';
 import LoadingBg from '../../asset/images/Capture.PNG'
+
 
 const NoteFlex = styled.div`
   display: flex;
@@ -59,10 +60,18 @@ const MainComponent = () => {
   const [trigger, setTrigger] = useState(false);
   const Array = useSelector((state) => state.notes.value);
   const editKey = useSelector((state) => state.notes.editKey);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch(); 
+  const gmailId = useSelector((state)=>state.notes.userID);
   const name = useSelector((state) => state.notes.name) 
 
-  const { data, loading, error } = useQuery(GET_DATA);
+  //const allData = useQuery(GET_ALL_DATA);
+  
+  /*if(!allData.loading){
+    
+    dispatch(setCompeleteAray(allData.data.notes_data));
+  }*/
+
+  const { data, loading, error } = useQuery(GET_ALL_DATA)//GET_ID_DATA,{variables:{gmailId:gmailId}});
 
   if (loading) {
   document.body.style.overflow="hidden";
@@ -76,12 +85,16 @@ const MainComponent = () => {
     </LoadingBox>
   ) 
 }
-if(error) return <p>Error!!!!!!</p>
+if(error) {console.log(error)}
   if (!trigger) {
+    console.log(data);
     dispatch(getNotes(data.notes_data));
+    //dispatch(setCompeleteAray(allData.data.notes_data));
+   // console.log(allData.data.notes_data);
     setTrigger(true);
   }
   document.body.style.overflow="";
+  console.log(Array);
   return (
     <div style={{paddingBottom:"6vh"}}>
       <Header />
