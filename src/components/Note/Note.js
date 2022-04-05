@@ -3,7 +3,7 @@ import styled from "styled-components";
 import EditIcon from "@mui/icons-material/Edit";
 import Fab from "@mui/material/Fab";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useMutation } from "@apollo/client";
 import { DELETE_DATA } from "../../Queries/Queries";
 import { deleteNote, editClick } from "../../Reducer/NoteData";
@@ -54,7 +54,7 @@ const EditBox = styled.div`
 
 const Note = (props) => {
   const dispatch = useDispatch();
-  const Array = useSelector((state)=>state.notes.value);
+  const Array = useSelector((state) => state.notes.array);
 
   const [deletenote] = useMutation(DELETE_DATA);
 
@@ -63,13 +63,13 @@ const Note = (props) => {
     deletenote({ variables: { id: { _eq: props.id } } });
   }
 
-  function editNoteFunction(){
-    Array.map((i,index)=>{
-      if(props.id === i.id){
-       dispatch(editClick(index));
+  function editNoteFunction() {
+    Array.map((i, index) => {
+      if (props.id === i.id) {
+        dispatch(editClick(index));
       }
       return null;
-    })
+    });
   }
 
   return (

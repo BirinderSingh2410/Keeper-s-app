@@ -13,7 +13,6 @@ import Tooltip from "@mui/material/Tooltip";
 import { useMutation } from "@apollo/client";
 import { UPDATE_DATA } from "../../Queries/Queries";
 
-
 const EditNoteBox = styled.div`
   width: 100%;
   height: 100%;
@@ -84,17 +83,15 @@ const EditNote = () => {
   const [click, setClick] = useState(false);
 
   const noteId = useSelector((state) => state.notes.editId);
-  const Array = useSelector((state) => state.notes.value);
+  const Array = useSelector((state) => state.notes.array);
   const dispatch = useDispatch();
 
   const [updatenote] = useMutation(UPDATE_DATA);
 
-  function editedNoteData() { 
-
+  function editedNoteData() {
     var title = Array[noteId].title;
     var description = Array[noteId].description;
     var color = Array[noteId].color;
-
 
     if (newcolor !== "") {
       color = newcolor;
@@ -107,7 +104,12 @@ const EditNote = () => {
     }
 
     dispatch(
-      editNote({index:Array[noteId].id, title: title, description: description, color: color })
+      editNote({
+        index: Array[noteId].id,
+        title: title,
+        description: description,
+        color: color,
+      })
     );
 
     updatenote({
@@ -129,13 +131,13 @@ const EditNote = () => {
           onClick={() => dispatch(editClick())}
         />
         <Input
-          placeholder="Title"
+          defaultValue={Array[noteId].title}
           className="input title"
           inputProps={ariaLabel}
           onChange={(e) => setTitle(e.target.value)}
         />
         <Input
-          placeholder="Description"
+          defaultValue={Array[noteId].description}
           className="input desc"
           inputProps={ariaLabel}
           onChange={(e) => {

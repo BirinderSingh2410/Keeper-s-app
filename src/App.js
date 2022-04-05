@@ -25,14 +25,11 @@ const client = new ApolloClient({
 });
 
 const App = () => {
-  const login = useSelector((state)=>state.notes.login);
-
+  const login = useSelector((state) => state.notes.login);
 
   return (
     <ApolloProvider client={client}>
-      {login ?
-        <MainComponent />
-      : <Login />}
+      {login ? <MainComponent /> : <Login />}
     </ApolloProvider>
   );
 };

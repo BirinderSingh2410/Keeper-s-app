@@ -11,8 +11,8 @@ export const CREATE_USER = gql`
   }
 `;
 export const GET_ALL_DATA = gql`
-  query{
-    notes_data{
+  query {
+    notes_data(order_by: { id: asc }) {
       id
       title
       description
@@ -20,10 +20,10 @@ export const GET_ALL_DATA = gql`
       gmail_id
     }
   }
-`
+`;
 export const GET_ID_DATA = gql`
-  query($gmailId:String!) {
-    notes_data(where:{gmail_id:{_eq:$gmailId}}){
+  query ($gmailId: String!) {
+    notes_data(order_by: { id: asc }, where: { gmail_id: { _eq: $gmailId } }) {
       id
       title
       description
@@ -42,7 +42,10 @@ export const INSERT_DATA = gql`
     $gmailId: String!
   ) {
     insert_notes_data(
-      on_conflict:{constraint:notes_data_pkey,where:{gmail_id:{_eq:$gmailId}}},
+      on_conflict: {
+        constraint: notes_data_pkey
+        where: { gmail_id: { _eq: $gmailId } }
+      }
       objects: {
         id: $id
         gmail_id: $gmailId

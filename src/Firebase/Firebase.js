@@ -1,9 +1,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 
-
-
-import { getAuth, GoogleAuthProvider,signOut }from 'firebase/auth'
+import { getAuth, GoogleAuthProvider, signOut } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -16,20 +14,20 @@ const firebaseConfig = {
   storageBucket: "keeper-app-a067a.appspot.com",
   messagingSenderId: "654502102616",
   appId: "1:654502102616:web:38b0f1c2bfd4c403c3ec2d",
-  measurementId: "G-16MV4SR94P"
+  measurementId: "G-16MV4SR94P",
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);          //using this you can use various features of firebase 
-
+const app = initializeApp(firebaseConfig); //using this you can use various features of firebase
 
 export const auth = getAuth(app);
 
-
-
 export const provider = new GoogleAuthProvider();
 
-
-export const signOutFromGoogle=()=>{
-  signOut(auth).then(()=>{window.location.reload(true)}).catch((error)=>console.error());
-}
+export const signOutFromGoogle = () => {
+  signOut(auth)
+    .then(() => {
+      window.location.reload(true);
+    })
+    .catch((error) => console.error());
+};
