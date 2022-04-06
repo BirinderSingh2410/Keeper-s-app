@@ -79,11 +79,11 @@ const ariaLabel = { "aria-label": "description" };
 const EditNote = () => {
   const [newtitle, setTitle] = useState("");
   const [newdescription, setDescription] = useState("");
-  const [newcolor, setColor] = useState("");
   const [click, setClick] = useState(false);
 
   const noteId = useSelector((state) => state.notes.editId);
   const Array = useSelector((state) => state.notes.array);
+  const [newcolor, setColor] = useState(Array[noteId].color);
   const dispatch = useDispatch();
 
   const [updatenote] = useMutation(UPDATE_DATA);

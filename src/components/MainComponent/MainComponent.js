@@ -5,9 +5,9 @@ import Note from "../Note/Note";
 import styled from "styled-components";
 import EditNote from "../EditNote/EditNote";
 import { useSelector, useDispatch } from "react-redux";
-import { getNotes, setCompeleteAray } from "../../Reducer/NoteData";
+import { setCompeleteAray } from "../../Reducer/NoteData";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_DATA, GET_ID_DATA } from "../../Queries/Queries";
+import { GET_ID_DATA } from "../../Queries/Queries";
 import CircularProgress from "@mui/material/CircularProgress";
 import LoadingBg from "../../asset/images/Capture.PNG";
 
@@ -19,8 +19,8 @@ const LoggedIn = styled.h2`
   font-weight: 400;
   font-size: 0.8em;
   margin-top: 44px;
-  margin-right: 10px;
-  margin-left: 83%;
+  margin-right: 30px;
+  text-align: right;
 `;
 const LoadingBox = styled.div`
   background-image: url(${LoadingBg});
@@ -65,13 +65,6 @@ const MainComponent = () => {
   const dispatch = useDispatch();
   const gmailId = useSelector((state) => state.notes.userID);
   const name = useSelector((state) => state.notes.name);
-
-  const allData = useQuery(GET_ALL_DATA);
-  if (!allData.loading) {
-    setTimeout(() => {
-      dispatch(getNotes(allData.data.notes_data));
-    }, 500);
-  }
 
   const { data, loading, error } = useQuery(GET_ID_DATA, {
     variables: { gmailId: gmailId },

@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 export const noteSlice = createSlice({
   name: "notes",
   initialState: {
-    value: [],
     array: [],
     editKey: false,
     name: "",
@@ -24,9 +23,7 @@ export const noteSlice = createSlice({
     setName: (state, action) => {
       state.name = action.payload;
     },
-    getNotes: (state, action) => {
-      state.value = action.payload;
-    },
+
     insertNote: (state, action) => {
       state.array.push(action.payload);
     },
@@ -57,7 +54,6 @@ export const {
   deleteNote,
   editClick,
   editNote,
-  getNotes,
   setName,
   setLogin,
   setUserID,

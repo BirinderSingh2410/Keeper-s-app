@@ -11,7 +11,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Tooltip from "@mui/material/Tooltip";
 import { insertNote } from "../../Reducer/NoteData";
 import { useMutation } from "@apollo/client";
-import { INSERT_DATA, GET_ALL_DATA } from "../../Queries/Queries";
+import { INSERT_DATA } from "../../Queries/Queries";
 
 const NewNoteBox = styled.div`
   width: 500px;
@@ -84,35 +84,30 @@ const ariaLabel = { "aria-label": "description" };
 
 const AddNewNote = () => {
   const [titleinput, setTitle] = useState("");
-  const [trigger, setTrigger] = useState(false);
   const [descriptioninput, setDescription] = useState("");
   const [click, setClick] = useState(false);
   const [colorClick, setColorClick] = useState("");
-  const Array = useSelector((state) => state.notes.value);
-  const [arrayID, setArrayID] = useState(0);
-  const filterArray = useSelector((state) => state.notes.array);
   const dispatch = useDispatch();
+
+  const Array = useSelector((state)=>state.notes.array);
   const gmailId = useSelector((state) => state.notes.userID);
   const [addTodo] = useMutation(INSERT_DATA);
 
+  function create_UUID(){
+    var dt = new Date().getTime();
+    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = (dt + Math.random()*16)%16 | 0;
+        dt = Math.floor(dt/16);
+        return (c=='x' ? r :(r&0x3|0x8)).toString(16);
+    });
+    return uuid.toString();
+}
+
   function addNewNote() {
     setClick(false);
-    var uniqueIndex;
-    if (!trigger) {
-      if (Array.length === 0) {
-        uniqueIndex = 0;
-      } else {
-        uniqueIndex = Array[Array.length - 1].id + 1;
-      }
-      setTrigger(true);
-      setArrayID(uniqueIndex);
-    } else {
-      if (filterArray.length === 0) uniqueIndex = arrayID;
-      else {
-        uniqueIndex = filterArray[filterArray.length - 1].id + 1;
-      }
-    }
-    console.log("array:" + Array.length);
+    var sortId=0;
+    if(Array.length !== 0)sortId = (Array[Array.length - 1].sort_id + 1);
+    const uniqueIndex = create_UUID();
     if (titleinput !== "" || descriptioninput !== "") {
       addTodo({
         variables: {
@@ -121,8 +116,8 @@ const AddNewNote = () => {
           color: colorClick,
           id: uniqueIndex,
           gmailId: gmailId,
+          sort_id : sortId
         },
-        refetchQueries: [{ query: GET_ALL_DATA }],
       });
 
       dispatch(
@@ -132,6 +127,7 @@ const AddNewNote = () => {
           description: descriptioninput,
           color: colorClick,
           gmailId: gmailId,
+          sort_id : sortId
         })
       );
     }

@@ -10,48 +10,37 @@ export const CREATE_USER = gql`
     }
   }
 `;
-export const GET_ALL_DATA = gql`
-  query {
-    notes_data(order_by: { id: asc }) {
-      id
-      title
-      description
-      color
-      gmail_id
-    }
-  }
-`;
+
 export const GET_ID_DATA = gql`
   query ($gmailId: String!) {
-    notes_data(order_by: { id: asc }, where: { gmail_id: { _eq: $gmailId } }) {
+    notes_data(order_by: { sort_id: asc }, where: { gmail_id: { _eq: $gmailId } }) {
       id
       title
       description
       color
       gmail_id
+      sort_id
     }
   }
 `;
 
 export const INSERT_DATA = gql`
   mutation (
-    $title: String!
-    $description: String!
-    $color: String!
-    $id: Int!
-    $gmailId: String!
+    $title: String!,
+    $description: String!,
+    $color: String!,
+    $id: String!,
+    $gmailId: String!,
+    $sort_id : Int!
   ) {
     insert_notes_data(
-      on_conflict: {
-        constraint: notes_data_pkey
-        where: { gmail_id: { _eq: $gmailId } }
-      }
       objects: {
         id: $id
         gmail_id: $gmailId
         title: $title
         color: $color
         description: $description
+        sort_id: $sort_id
       }
     ) {
       returning {
@@ -60,13 +49,14 @@ export const INSERT_DATA = gql`
         description
         color
         gmail_id
+        sort_id
       }
     }
   }
 `;
 
 export const DELETE_DATA = gql`
-  mutation ($id: Int_comparison_exp!) {
+  mutation ($id: String_comparison_exp!) {
     delete_notes_data(where: { id: $id }) {
       affected_rows
     }
@@ -75,7 +65,7 @@ export const DELETE_DATA = gql`
 
 export const UPDATE_DATA = gql`
   mutation (
-    $id: Int!
+    $id: String!
     $title: String!
     $description: String!
     $color: String!
