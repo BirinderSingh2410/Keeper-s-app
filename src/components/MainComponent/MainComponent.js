@@ -16,14 +16,12 @@ const NoteFlex = styled.div`
   flex-wrap: wrap;
 `;
 const LoggedIn = styled.h2`
-  bottom: 0;
-  position: absolute;
   font-weight: 400;
   font-size: 0.8em;
-  right: 0;
-  margin-bottom: 10px;
+  margin-top: 44px;
   margin-right: 10px;
-`
+  margin-left: 83%;
+`;
 const LoadingBox = styled.div`
   background-image: url(${LoadingBg});
 
